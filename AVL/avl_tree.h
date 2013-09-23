@@ -12,10 +12,23 @@ class AVL_tree
     typedef node<T> Node_T;
 private:
     Node_T *m_pRoot;
+    size_t m_size;
+
+private:
+
+    bool inner_findRec(T &d, Node_T *&p);
+
+    void printIn(Node_T *p);
+    void printPre(Node_T *p);
+    void printPos(Node_T *p);
+
+    void printElem(Node_T *&p);
+
+    void balance(){}
 
 public:
 
-    AVL_tree() :m_pRoot(0) {}
+    AVL_tree() :m_pRoot(0), m_size(0) {}
 
     ~AVL_tree();
 
@@ -29,23 +42,13 @@ public:
 
     bool findRec(T &d, Node_T *&p);
 
-    void printIn(Node_T *p);
-
-    void printPre(Node_T *p);
-
-    void printPos(Node_T *p);
-
     void printIn();
 
     void printPre();
 
     void printPos();
 
-    void printElem(Node_T *&p);
-
-    size_t height(Node_T *&p);
-
-    size_t height();
+    int height();
 };
 
 //#include "avl_tree.cpp"
@@ -70,11 +73,15 @@ bool AVL_tree<T>::find(T &d, Node_T **&p) {
 
 template <typename T>
 bool AVL_tree<T>::add(T &d) {
-//    Node_T **p;
-//    if(find(d, p))
-//        return false;
-//    *p = new Node_T(d);
+    Node_T **p;
+    if(find(d, p))
+        return false;
+    *p = new Node_T(d);
     return true;
+    m_size++;
+
+    balance();
+    m_pRoot->update_height();
 }
 
 template <typename T>
@@ -112,9 +119,16 @@ bool AVL_tree<T>::addRec(T &d, Node_T *&p) {
 
 template <typename T>
 bool AVL_tree<T>::findRec(T &d, Node_T *&p) {
-//    if(p->m_dato == d)
-//        return true;
-    return findRec(d, p->m_pChildren[p->m_dato < d]);
+    p=m_pRoot;
+    return inner_findRec(d, p);
+}
+
+template <typename T>
+bool AVL_tree<T>::inner_findRec(T &d, Node_T *&p) {
+    if(!p) return false;
+    if(p->m_dato == d)
+        return true;
+    return inner_findRec(d, p->m_pChildren[p->m_dato < d]);
 }
 
 template <typename T>
@@ -165,19 +179,9 @@ void AVL_tree<T>::printPos() {
 }
 
 template <typename T>
-size_t AVL_tree<T>::height(Node_T *&p) { //Calcula la profundidad partiendo del nodo que se pasa como parámetro
-    if(p) {
-        size_t height_left = height(p->m_pChildren[0]),
-               height_right = height(p->m_pChildren[1]);
-        return ((height_left < height_right) ? height_right : height_left) + 1;
-    }
-
-    return 0;
-}
-
-template <typename T>
-size_t AVL_tree<T>::height() {                //B)
-    return height(m_pRoot);
+int AVL_tree<T>::height() {                //B)
+    if(!m_pRoot) return -1;
+    return m_pRoot->m_height;
 }
 
 #endif // AVL_TREE_H
