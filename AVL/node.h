@@ -7,7 +7,7 @@ class node
 public:
     T m_dato;
     node<T> *m_pChildren[2];
-    int count[2];
+    int b_factor;
 
 public:
     node(T &_dato);

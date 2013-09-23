@@ -2,6 +2,9 @@
 #define AVL_TREE_H
 
 #include "node.h"
+#include <iostream>
+
+using namespace std;
 
 template <typename T>
 class AVL_tree
@@ -43,6 +46,10 @@ public:
     void printPos();
 
     void printElem(Node_T *&p);
+
+    size_t height(Node_T *&p);
+
+    size_t height();
 };
 
 #include "avl_tree.cpp"
