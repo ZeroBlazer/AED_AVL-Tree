@@ -12,6 +12,8 @@ public:
 public:
     node(T &_dato);
 
+    ~node();
+
     void kill_me();
 };
 

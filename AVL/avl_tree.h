@@ -18,11 +18,6 @@ public:
 
     ~AVL_tree();
 
-    ~BinTree() {
-        if(m_pRoot)
-            m_pRoot->kill_me();
-    }
-
     bool find(T &d, Node_T **&p);
 
     bool add(T &d);

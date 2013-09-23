@@ -2,7 +2,7 @@
 
 template <typename T>
 node<T>::node(T &_dato) :
-    m_dato(dato)
+    m_dato(_dato)
 {}
 
 template <typename T>
