@@ -3,7 +3,9 @@
 template <typename T>
 node<T>::node(T &_dato) :
     m_dato(_dato)
-{}
+{
+    m_pChildren[0] = m_pChildren[1] = NULL;
+}
 
 template <typename T>
 node<T>::~node()
