@@ -1,4 +1,4 @@
-#include "avl_tree.h"
+/*#include "avl_tree.h"
 
 template <typename T>
 AVL_tree<T>::AVL_tree() :
@@ -134,3 +134,5 @@ template <typename T>
 size_t AVL_tree<T>::height() {                //B)
     return height(m_pRoot);
 }
+
+*/

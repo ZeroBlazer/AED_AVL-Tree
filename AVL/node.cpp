@@ -1,4 +1,4 @@
-#include "node.h"
+/*#include "node.h"
 
 template <typename T>
 node<T>::node(T &_dato) :
@@ -17,3 +17,4 @@ void node<T>::kill_me() {
         m_pChildren[1]->kill_me();
     delete this;
 }
+*/
