@@ -77,11 +77,12 @@ bool AVL_tree<T>::add(T &d) {
     if(find(d, p))
         return false;
     *p = new Node_T(d);
-    return true;
     m_size++;
 
     balance();
     m_pRoot->update_height();
+
+    return true;
 }
 
 template <typename T>
