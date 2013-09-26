@@ -21,13 +21,9 @@ private:
 
     void printElem(Node_T *&p);
 
-    void singleLeftRotation(Node_T *&p);
+    void singleRotation(Node_T *&p);
 
-    void singleRightRotation(Node_T *&p);
-
-    void doubleLeftRotation(Node_T *&p);
-
-    void doubleRightRotation(Node_T *&p);
+    void doubleRotation(Node_T *&p);
 
 public:
 
@@ -42,6 +38,8 @@ public:
     bool remove(T &d);
 
     int height();
+
+    void balance(Node_T *ptr = m_pRoot);
 
     void printIn();
 
@@ -77,13 +75,12 @@ bool AVL_tree<T>::find(T &d, Node_T **&p) {
 }
 
 template <typename T>
-void AVL_tree<T>::singleLeftRotation(Node_T *&p) {
-
-}
-
-template <typename T>
-void AVL_tree<T>::singleRightRotation(Node_T *&p) {
-
+void AVL_tree<T>::singleRotation(Node_T *&p, int way) {
+    Node_T *Child = p->m_pChildren[!way],
+           *tmp = Child->m_pChildren[way];
+    Child->m_pChildren[way] = p;
+    parent->m_pChildren[!way] = tmp;
+    p = Child;
 }
 
 template <typename T>
@@ -95,20 +92,6 @@ template <typename T>
 void AVL_tree<T>::doubleRightRotation(Node_T *&p) {
 
 }
-
-//template <typename T>
-//bool AVL_tree<T>::insert(T &d) {
-//    Node_T **p;
-//    if(find(d, p))
-//        return false;
-//    *p = new Node_T(d);
-//    m_size++;
-
-//    balance();
-//    m_pRoot->update_height();
-
-//    return true;
-//}
 
 template <typename T>
 bool AVL_tree<T>::insert(T &d, Node_T *&p = m_pRoot) {
@@ -125,10 +108,12 @@ bool AVL_tree<T>::insert(T &d, Node_T *&p = m_pRoot) {
         case -1:
         case 1:
             return true;
-        case -2:    //Heavy Left
-            break;
-        case 2:     //Heavy Right
-            break;
+        case -2:    //Left Heavy
+//          do_stuff();
+            return true;
+        case 2:     //Right Heavy
+//          do_stuff();
+            return true;
         default:
             throw 0;
         }
