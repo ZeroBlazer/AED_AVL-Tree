@@ -84,12 +84,7 @@ void AVL_tree<T>::singleRotation(Node_T *&p, int way) {
 }
 
 template <typename T>
-void AVL_tree<T>::doubleLeftRotation(Node_T *&p) {
-
-}
-
-template <typename T>
-void AVL_tree<T>::doubleRightRotation(Node_T *&p) {
+void AVL_tree<T>::doubleRotation(Node_T *&p) {
 
 }
 
