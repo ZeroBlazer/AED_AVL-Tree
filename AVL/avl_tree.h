@@ -2,7 +2,10 @@
 #define AVL_TREE_H
 
 #include "node.h"
-#include <iostream>
+#include <fstream>
+#include <string>
+#include <fstream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -22,7 +25,7 @@ private:
 
 private:
 
-    bool insert(T &d, Node_T *&p = m_pRoot);
+    bool insert(T &d, Node_T *&p);
 
     void printElem(Node_T *&p);
 
@@ -30,9 +33,13 @@ private:
 
     void doubleRotation(Node_T *&p, RotationWay way);
 
+    void makeRelations(Node_T *origin, ofstream& file);
+
 public:
 
-    AVL_tree() :m_pRoot(0), m_size(0) {}
+    AVL_tree() :
+        m_pRoot(0)
+    {}
 
     ~AVL_tree();
 
@@ -42,7 +49,7 @@ public:
 
     bool remove(T &d);
 
-    void AVL_tree<T>::graph();
+    void graph();
 
     void printIn();
 

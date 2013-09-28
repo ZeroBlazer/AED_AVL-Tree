@@ -17,7 +17,7 @@ class node
     public:
         node(T &d) :
             m_dato(d),
-            m_height(0)
+            balance_factor(0)
         {
             m_pChildren[0] = m_pChildren[1] = NULL;
         }

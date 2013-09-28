@@ -5,11 +5,15 @@ using namespace std;
 
 int main()
 {
+    AVL_tree<int> Tr;
+    int a = 10, b = 20, c = 30, d = 40, e = 50;
+    Tr.insert(d);
+    Tr.insert(a);
+    Tr.insert(e);
+    Tr.insert(b);
+    Tr.insert(c);
+    Tr.printIn();
 
-#ifdef __gnu_linux__
-//    doThisStuff();
-#endif
-    cout << "Hello World!" << endl;
     return 0;
 }
 

@@ -43,7 +43,7 @@ void AVL_tree<T>::doubleRotation(Node_T *&p, RotationWay way) {
         p->balance_factor = (way) ? 0 : 1;
         q->balance_factor = (way) ? 1 : 0;
         break;
-    case -1:
+    case 1:
         p->balance_factor = (way) ? -1 : 0;
         q->balance_factor = (way) ? 0 : -1;
         break;
@@ -51,7 +51,7 @@ void AVL_tree<T>::doubleRotation(Node_T *&p, RotationWay way) {
 }
 
 template <typename T>
-bool AVL_tree<T>::insert(T &d, Node_T *&p = m_pRoot) {
+bool AVL_tree<T>::insert(T &d, Node_T *&p) {
     if(!p) {
         p = new Node_T(d);
         return true;
@@ -68,15 +68,15 @@ bool AVL_tree<T>::insert(T &d, Node_T *&p = m_pRoot) {
         switch (p->balance_factor) {
         case 2:
             if(p->m_pChildren[1]->balance_factor == 1)
-                doubleRotation(p, RotationWay::RIGHT);
+                doubleRotation(p, RIGHT);
             else
-                doubleRotation(p, RotationWay::LEFT);
+                doubleRotation(p, LEFT);
             break;
         case -2:
             if(p->m_pChildren[0]->balance_factor == 1)
-                doubleRotation(p, RotationWay::LEFT);
+                doubleRotation(p, LEFT);
             else
-                doubleRotation(p, RotationWay::RIGHT);
+                doubleRotation(p, RIGHT);
             break;
         default:
             break;
@@ -116,6 +116,22 @@ bool AVL_tree<T>::remove(T &d) {
 }
 
 template<typename T>
+void AVL_tree<T>::makeRelations(Node_T *origin, ofstream& file)
+{
+    if(!origin) return;
+    if(origin->m_pChildren[0])
+    {
+        file<<"\t"<<origin->m_dato<<"->"<<origin->m_pChildren[0]->m_dato<<";"<<endl;
+        makeRelations(origin->m_pChildren[0],file);
+    }
+    if(origin->m_pChildren[1])
+    {
+        file<<"\t"<<origin->m_dato<<"->"<<origin->m_pChildren[1]->m_dato<<";"<<endl;
+        makeRelations(origin->m_pChildren[1],file);
+    }
+}
+
+template<typename T>
 void AVL_tree<T>::graph()
 {
     if(!m_pRoot) return;
@@ -123,13 +139,8 @@ void AVL_tree<T>::graph()
     ofstream file("graph.dot");
     file<<"digraph Text{"<<endl;
 
-    if(m_size==1)
-        file<<m_pRoot->m_dato<<";"<<endl;
-    else
-    {
-        pNode_T p= m_pRoot;
-        makeRelations(p, file);
-    }
+    Node_T *p= m_pRoot;
+    makeRelations(p, file);
 
     file<<"}";
     file.close();
