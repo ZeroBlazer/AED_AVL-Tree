@@ -57,7 +57,7 @@ int node<T>::balance_factor()
 {
     int left_h  = (m_pChildren[0]) ? m_pChildren[0]->m_height : -1;
         right_h = (m_pChildren[1]) ? m_pChildren[1]->m_height : -1;
-    return left_h - right_h;
+    return right_h - left_h;
 }
 
 #endif // NODE_H
