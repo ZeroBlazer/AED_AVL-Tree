@@ -42,9 +42,7 @@ public:
 
     bool remove(T &d);
 
-    int height();
-
-    void balance(Node_T *ptr = m_pRoot);
+    void AVL_tree<T>::graph();
 
     void printIn();
 
@@ -57,6 +55,8 @@ public:
     void printPre(Node_T *p);
 
     void printPos(Node_T *p);
+
+    int height();
 };
 
 #include "avl_tree.cpp"

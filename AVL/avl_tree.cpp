@@ -40,8 +40,12 @@ void AVL_tree<T>::doubleRotation(Node_T *&p, RotationWay way) {
         p->balance_factor = q->balance_factor = 0;
         break;
     case -1:
+        p->balance_factor = (way) ? 0 : 1;
+        q->balance_factor = (way) ? 1 : 0;
         break;
     case -1:
+        p->balance_factor = (way) ? -1 : 0;
+        q->balance_factor = (way) ? 0 : -1;
         break;
     }
 }
@@ -63,15 +67,23 @@ bool AVL_tree<T>::insert(T &d, Node_T *&p = m_pRoot) {
         p->balance_factor += (p->m_dato < d) ? 1 : -1;
         switch (p->balance_factor) {
         case 2:
-            if()
+            if(p->m_pChildren[1]->balance_factor == 1)
+                doubleRotation(p, RotationWay::RIGHT);
+            else
+                doubleRotation(p, RotationWay::LEFT);
             break;
         case -2:
+            if(p->m_pChildren[0]->balance_factor == 1)
+                doubleRotation(p, RotationWay::LEFT);
+            else
+                doubleRotation(p, RotationWay::RIGHT);
             break;
         default:
             break;
         }
         return true;
     }
+    return false;
 }
 
 template <typename T>
@@ -103,6 +115,28 @@ bool AVL_tree<T>::remove(T &d) {
     return false;
 }
 
+template<typename T>
+void AVL_tree<T>::graph()
+{
+    if(!m_pRoot) return;
+
+    ofstream file("graph.dot");
+    file<<"digraph Text{"<<endl;
+
+    if(m_size==1)
+        file<<m_pRoot->m_dato<<";"<<endl;
+    else
+    {
+        pNode_T p= m_pRoot;
+        makeRelations(p, file);
+    }
+
+    file<<"}";
+    file.close();
+
+    system("dot -Tpng -O graph.dot");
+    system("eog graph.dot.png");
+}
 
 /*******TERMINADO*******/
 template <typename T>
@@ -162,5 +196,4 @@ void AVL_tree<T>::printPos() {
 template <typename T>
 int AVL_tree<T>::height() {
 //    REIMPLEMENTAR ---------------------------------->
-
 }
