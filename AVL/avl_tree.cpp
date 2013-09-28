@@ -1,9 +1,4 @@
-/*#include "avl_tree.h"
-
-template <typename T>
-AVL_tree<T>::AVL_tree() :
-    m_pRoot(NULL)
-{}
+#include "avl_tree.h"
 
 template <typename T>
 AVL_tree<T>::~AVL_tree()
@@ -24,12 +19,64 @@ bool AVL_tree<T>::find(T &d, Node_T **&p) {
 }
 
 template <typename T>
-bool AVL_tree<T>::add(T &d) {
-//    Node_T **p;
-//    if(find(d, p))
-//        return false;
-//    *p = new Node_T(d);
-//    return true;
+void AVL_tree<T>::singleRotation(Node_T *&p, RotationWay way) {
+    Node_T *q = p->m_pChildren[way];
+    p->m_pChildren[way] = q->m_pChildren[!way];
+    p->m_pChildren[!way] = p;
+    p->balance_factor = q->balance_factor = 0;
+    p = q;
+}
+
+template <typename T>
+void AVL_tree<T>::doubleRotation(Node_T *&p, RotationWay way) {
+    Node_T  *q = p->m_pChildren[!way],
+            *r = q->m_pChildren[way];
+    p->m_pChildren[!way] = r->m_pChildren[way];
+    q->m_pChildren[way] = r->m_pChildren[!way];
+    r->m_pChildren[!way] = q;
+    r->m_pChildren[way] = p;
+    switch (r->balance_factor) {
+    case 0:
+        p->balance_factor = q->balance_factor = 0;
+        break;
+    case -1:
+        break;
+    case -1:
+        break;
+    }
+}
+
+template <typename T>
+bool AVL_tree<T>::insert(T &d, Node_T *&p = m_pRoot) {
+    if(!p) {
+        p = new Node_T(d);
+        return true;
+    }
+
+    //Verificación de repeticiones, retorna false si encontró algún elemento
+#ifndef ALLW_REP
+    if(p->m_dato == d)
+        return false;
+#endif
+
+    if(insert(d, p->m_pChildren[p->m_dato < d])) {
+        p->balance_factor += (p->m_dato < d) ? 1 : -1;
+        switch (p->balance_factor) {
+        case 2:
+            if()
+            break;
+        case -2:
+            break;
+        default:
+            break;
+        }
+        return true;
+    }
+}
+
+template <typename T>
+bool AVL_tree<T>::insert(T &d) {
+    return insert(d, m_pRoot);
 }
 
 template <typename T>
@@ -53,30 +100,17 @@ bool AVL_tree<T>::remove(T &d) {
 //        delete tmp;
 //        return true;
 //    }
-//    return false;
+    return false;
 }
 
-template <typename T>
-bool AVL_tree<T>::addRec(T &d, Node_T *&p) {
-//    if(p)
-//        return addRec(d, p->m_pChildren[p->m_dato < d]);
-//    Node_T *neo = Node_T(d);
-//    p = neo;
-//    return true;
-}
 
-template <typename T>
-bool AVL_tree<T>::findRec(T &d, Node_T *&p) {
-//    if(p->m_dato == d)
-//        return true;
-//    return findRec(d, p->m_pChildren[p->m_dato < d]);
-}
-
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printElem(Node_T *&p) {
     cout << p->m_dato << "\t";
 }
 
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printIn(Node_T *p) {
     if(!p)  return;
@@ -85,6 +119,7 @@ void AVL_tree<T>::printIn(Node_T *p) {
     if(p->m_pChildren[1])   printIn(p->m_pChildren[1]);
 }
 
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printPre(Node_T *p) {
     if(!p)  return;
@@ -93,6 +128,7 @@ void AVL_tree<T>::printPre(Node_T *p) {
     if(p->m_pChildren[1])   printIn(p->m_pChildren[1]);
 }
 
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printPos(Node_T *p) {
     if(!p)  return;
@@ -101,38 +137,30 @@ void AVL_tree<T>::printPos(Node_T *p) {
     printElem(p);
 }
 
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printIn() {
     printIn(m_pRoot);
     cout << endl;
 }
 
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printPre() {
     printPre(m_pRoot);
     cout << endl;
 }
 
+/*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printPos() {
     printPos(m_pRoot);
     cout << endl;
 }
 
+/*******TERMINADO*******/
 template <typename T>
-size_t AVL_tree<T>::height(Node_T *&p) { //Calcula la profundidad partiendo del nodo que se pasa como parámetro
-    if(p) {
-        size_t height_left = height(p->m_pChildren[0]),
-               height_right = height(p->m_pChildren[1]);
-        return ((height_left < height_right) ? height_right : height_left) + 1;
-    }
+int AVL_tree<T>::height() {
+//    REIMPLEMENTAR ---------------------------------->
 
-    return 0;
 }
-
-template <typename T>
-size_t AVL_tree<T>::height() {                //B)
-    return height(m_pRoot);
-}
-
-*/
