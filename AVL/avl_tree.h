@@ -25,13 +25,13 @@ private:
 
 private:
 
-    bool insert(T &d, Node_T *&p);
+    bool insert(T &d, Node_T *&p, bool &Balanced);
 
     void printElem(Node_T *&p);
 
-    void singleRotation(Node_T *&p, RotationWay way);
+    void singleRotationTo(Node_T *&p, RotationWay way);
 
-    void doubleRotation(Node_T *&p, RotationWay way);
+    void doubleRotationTo(Node_T *&p, RotationWay way);
 
     void makeRelations(Node_T *origin, ofstream& file);
 

@@ -19,16 +19,16 @@ bool AVL_tree<T>::find(T &d, Node_T **&p) {
 }
 
 template <typename T>
-void AVL_tree<T>::singleRotation(Node_T *&p, RotationWay way) {
-    Node_T *q = p->m_pChildren[way];
-    p->m_pChildren[way] = q->m_pChildren[!way];
-    p->m_pChildren[!way] = p;
+void AVL_tree<T>::singleRotationTo(Node_T *&p, RotationWay way) {
+    Node_T *q = p->m_pChildren[!way];
+    p->m_pChildren[!way] = q->m_pChildren[way];
+    q->m_pChildren[way] = p;
     p->balance_factor = q->balance_factor = 0;
     p = q;
 }
 
 template <typename T>
-void AVL_tree<T>::doubleRotation(Node_T *&p, RotationWay way) {
+void AVL_tree<T>::doubleRotationTo(Node_T *&p, RotationWay way) {
     Node_T  *q = p->m_pChildren[!way],
             *r = q->m_pChildren[way];
     p->m_pChildren[!way] = r->m_pChildren[way];
@@ -44,40 +44,46 @@ void AVL_tree<T>::doubleRotation(Node_T *&p, RotationWay way) {
         q->balance_factor = (way) ? 1 : 0;
         break;
     case 1:
-        p->balance_factor = (way) ? -1 : 0;
-        q->balance_factor = (way) ? 0 : -1;
+        p->balance_factor = (way) ? 0 : -1 ;
+        q->balance_factor = (way) ? -1 : 0;
         break;
     }
+    r->balance_factor = 0;
+    p = r;
 }
 
 template <typename T>
-bool AVL_tree<T>::insert(T &d, Node_T *&p) {
+bool AVL_tree<T>::insert(T &d, Node_T *&p, bool &Balanced) {
     if(!p) {
         p = new Node_T(d);
         return true;
     }
 
     //Verificación de repeticiones, retorna false si encontró algún elemento
-#ifndef ALLW_REP
     if(p->m_dato == d)
         return false;
-#endif
 
-    if(insert(d, p->m_pChildren[p->m_dato < d])) {
-        p->balance_factor += (p->m_dato < d) ? 1 : -1;
+    if(insert(d, p->m_pChildren[p->m_dato < d], Balanced)) {
+        if(!Balanced)
+            p->balance_factor += (p->m_dato < d) ? 1 : -1;
+
         switch (p->balance_factor) {
         case 2:
-            if(p->m_pChildren[1]->balance_factor == 1)
-                doubleRotation(p, RIGHT);
+            if(p->m_pChildren[RIGHT]->balance_factor == -1)
+                doubleRotationTo(p, LEFT);
             else
-                doubleRotation(p, LEFT);
+                singleRotationTo(p, LEFT);
+            Balanced = true;
             break;
         case -2:
-            if(p->m_pChildren[0]->balance_factor == 1)
-                doubleRotation(p, LEFT);
+            if(p->m_pChildren[LEFT]->balance_factor == 1)
+                doubleRotationTo(p, RIGHT);
             else
-                doubleRotation(p, RIGHT);
+                singleRotationTo(p, RIGHT);
+            Balanced = true;
             break;
+        case 0:
+            Balanced = true;
         default:
             break;
         }
@@ -88,7 +94,8 @@ bool AVL_tree<T>::insert(T &d, Node_T *&p) {
 
 template <typename T>
 bool AVL_tree<T>::insert(T &d) {
-    return insert(d, m_pRoot);
+    bool Rotated = false;
+    return insert(d, m_pRoot, Rotated);
 }
 
 template <typename T>
@@ -119,15 +126,15 @@ template<typename T>
 void AVL_tree<T>::makeRelations(Node_T *origin, ofstream& file)
 {
     if(!origin) return;
-    if(origin->m_pChildren[0])
+    if(origin->m_pChildren[LEFT])
     {
-        file<<"\t"<<origin->m_dato<<"->"<<origin->m_pChildren[0]->m_dato<<";"<<endl;
-        makeRelations(origin->m_pChildren[0],file);
+        file<<"\t"<<origin->m_dato<<"->"<<origin->m_pChildren[LEFT]->m_dato<<";"<<endl;
+        makeRelations(origin->m_pChildren[LEFT],file);
     }
-    if(origin->m_pChildren[1])
+    if(origin->m_pChildren[RIGHT])
     {
-        file<<"\t"<<origin->m_dato<<"->"<<origin->m_pChildren[1]->m_dato<<";"<<endl;
-        makeRelations(origin->m_pChildren[1],file);
+        file<<"\t"<<origin->m_dato<<"->"<<origin->m_pChildren[RIGHT]->m_dato<<";"<<endl;
+        makeRelations(origin->m_pChildren[RIGHT],file);
     }
 }
 
@@ -152,7 +159,11 @@ void AVL_tree<T>::graph()
 /*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printElem(Node_T *&p) {
-    cout << p->m_dato << "\t";
+
+    cout << p->m_dato
+        //Imprime el factor de balance
+         << ": " << p->balance_factor
+         << "\t";
 }
 
 /*******TERMINADO*******/
@@ -169,16 +180,19 @@ template <typename T>
 void AVL_tree<T>::printPre(Node_T *p) {
     if(!p)  return;
     printElem(p);
-    if(p->m_pChildren[0])   printIn(p->m_pChildren[0]);
-    if(p->m_pChildren[1])   printIn(p->m_pChildren[1]);
+    cout << "{";
+    if(p->m_pChildren[0])   printPre(p->m_pChildren[0]);
+    cout << ", ";
+    if(p->m_pChildren[1])   printPre(p->m_pChildren[1]);
+    cout << "} ";
 }
 
 /*******TERMINADO*******/
 template <typename T>
 void AVL_tree<T>::printPos(Node_T *p) {
     if(!p)  return;
-    if(p->m_pChildren[0])   printIn(p->m_pChildren[0]);
-    if(p->m_pChildren[1])   printIn(p->m_pChildren[1]);
+    if(p->m_pChildren[0])   printPos(p->m_pChildren[0]);
+    if(p->m_pChildren[1])   printPos(p->m_pChildren[1]);
     printElem(p);
 }
 
