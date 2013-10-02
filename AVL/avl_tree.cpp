@@ -143,7 +143,7 @@ void AVL_tree<T>::graph()
 {
     if(!m_pRoot) return;
 
-    ofstream file("graph.dot");
+    ofstream file("C:/graphviz_2.34/bin/graph.dot");
     file<<"digraph Text{"<<endl;
 
     Node_T *p= m_pRoot;
@@ -152,8 +152,8 @@ void AVL_tree<T>::graph()
     file<<"}";
     file.close();
 
-    system("dot -Tpng -O graph.dot");
-    system("eog graph.dot.png");
+    //system("dot -Tpng -O graph.dot");
+    //system("eog graph.dot.png");
 }
 
 /*******TERMINADO*******/

@@ -6,24 +6,14 @@ using namespace std;
 int main()
 {
     AVL_tree<int> Tr;
-    int ins = 50;
-    Tr.insert(ins);
-    Tr.printPre();
-    ins = 10;
-    Tr.insert(ins);
-    Tr.printPre();
-    ins = 60;
-    Tr.insert(ins);
-    Tr.printPre();
-    ins = 55;
-    Tr.insert(ins);
-    Tr.printPre();
-    ins = 70;
-    Tr.insert(ins);
-    Tr.printPre();
-    ins = 57;
-    Tr.insert(ins);
-    Tr.printPre();
+    int ins;
+
+    for(int i = 0; i < 1000; i++) {
+        ins = rand();
+        Tr.insert(ins);
+    }
+
+    Tr.graph();
 
     return 0;
 }
